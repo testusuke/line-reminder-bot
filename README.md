@@ -1,4 +1,4 @@
-# line-remainder-bot
+# line-reminder-bot
 
 This is Reminder bot
 
