@@ -17,5 +17,5 @@ jobs:
         with:
           key: ${{ secrets.SSH_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
-      - name: deploy
-        run: bash deploy.sh
+      - name: rsync
+        run: rsync -acvz --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:app/line-reminder-bot/
