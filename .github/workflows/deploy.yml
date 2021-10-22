@@ -12,10 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
+      - name: ssh key generate
+        run: echo "$SSH_KEY" > key && chmod 600 key
+        env:
           key: ${{ secrets.SSH_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: rsync
         run: rsync -acvz --delete -e ”ssh -i key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no” ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:app/line-reminder-bot/
