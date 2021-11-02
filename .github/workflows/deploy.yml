@@ -1,10 +1,8 @@
 name: ssh-deploy
-on:
-  push:
-    branches:
-      - main
-      - develop
-      - feature/*
+on: [push]
+
+env:
+  theme_name: line-reminder-bot
 
 jobs:
   deploy:
@@ -12,9 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: ssh key generate
-        run: echo "$SSH_KEY" > key && chmod 600 key
-        env:
-          key: ${{ secrets.SSH_KEY }}
-      - name: rsync
-        run: rsync -acvz --delete -e ”ssh -i key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no” ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:app/line-reminder-bot/
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avzr
+          path: ${{ env.theme_name }}/
+          remote_path: ${{ secrets.SSH_HOST_PATH }}
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_port: ${{ secrets.SSH_PORT }}
+          remote_user: ${{ secrets.SSH_USER }}
+          remote_key: ${{ secrets.SSH_KEY }}
