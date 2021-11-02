@@ -1,6 +1,8 @@
 const express = require("express");
 const line = require("@line/bot-sdk");
 const mysql = require("mysql");
+const fs = require('fs');
+const https = require('https');
 
 //  line
 const lineConfig = {
@@ -17,6 +19,12 @@ const connection = mysql.createConnection({
 //  app
 const expressPort = 3000;
 const app = express();
+
+const options = {
+    key:  fs.readFileSync('./server.key'),
+    cert: fs.readFileSync('./server.crt')
+};
+const server = https.createServer(options,app);
 
 //  listen webhooks
 app.post("/webhook", line.middleware(lineConfig), (req, res) => {
@@ -46,4 +54,4 @@ const test = () => {
 setInterval(test, 1000);
 
 //  express start
-app.listen(expressPort);
+server.listen(expressPort);
