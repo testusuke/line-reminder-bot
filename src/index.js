@@ -1,15 +1,23 @@
 const express = require("express");
 const line = require("@line/bot-sdk");
+const mysql = require("mysql");
 
-const expressPort = process.env.EXPRESS_PORT;
-//  config
+//  line
 const lineConfig = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
     channelSecret: process.env.CHANNEL_SECRET
 };
 
+const connection = mysql.createConnection({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASS
+});
+
 //  app
+const expressPort = 3000;
 const app = express();
+
 //  listen webhooks
 app.post("/webhook", line.middleware(lineConfig), (req, res) => {
    Promise
@@ -20,7 +28,7 @@ app.post("/webhook", line.middleware(lineConfig), (req, res) => {
 //  line client
 const client = new line.Client(lineConfig);
 //  event handler
-function handleEvent(event) {
+const handleEvent = (event) => {
     if (event.type !== 'message' || event.message.type !== 'text') {
         return Promise.resolve(null);
     }
@@ -29,7 +37,7 @@ function handleEvent(event) {
         type: 'text',
         text: event.message.text
     });
-}
+};
 
 const test = () => {
     console.log("hello");
