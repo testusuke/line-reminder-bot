@@ -1,10 +1,8 @@
 name: ssh-deploy
-on:
-  push:
-    branches:
-      - main
-      - develop
-      - feature/*
+on: [push]
+
+env:
+  theme_name: line-reminder-bot
 
 jobs:
   deploy:
@@ -12,10 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: install SSH key
-        uses: shimataro/ssh-key-action@v2
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@4.1
         with:
+          switches: -avzr
+          path: /
+          remote_path: ${{ secrets.SSH_HOST_PATH }}
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_port: ${{ secrets.SSH_PORT }}
+          remote_user: ${{ secrets.SSH_USER }}
+          remote_key: ${{ secrets.SSH_KEY }}
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
-      - name: rsync
-        run: rsync -acvz --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:app/line-reminder-bot/
+          port: ${{ secrets.SSH_PORT }}
+          script: whoami
