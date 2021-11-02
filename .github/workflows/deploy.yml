@@ -14,7 +14,7 @@ jobs:
         uses: burnett01/rsync-deployments@4.1
         with:
           switches: -avzr
-          path: ${{ env.theme_name }}/
+          path: /
           remote_path: ${{ secrets.SSH_HOST_PATH }}
           remote_host: ${{ secrets.SSH_HOST }}
           remote_port: ${{ secrets.SSH_PORT }}
