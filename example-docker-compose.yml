@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - CHANNEL_ACCESS_TOKEN=TOKEN
+      - CHANNEL_SECRET=SECRET
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=admin
+      - MYSQL_PASS=password
+    ports:
+      - '3000:3000'
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: my_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ~/docker/line-reminder-bot/db/data:/var/lib/mysql
+      - ~/docker/line-reminder-bot/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ~/docker/line-reminder-bot/db/sql:/docker-entrypoint-initdb.d
+    ports:
+      - '3306:3306'
