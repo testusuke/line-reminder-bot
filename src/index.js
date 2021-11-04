@@ -21,8 +21,8 @@ const expressPort = 3000;
 const app = express();
 
 const options = {
-    key:  fs.readFileSync('./server.key'),
-    cert: fs.readFileSync('./server.crt')
+    key:  fs.readFileSync('/app/server.key'),
+    cert: fs.readFileSync('/app/server.crt')
 };
 const server = https.createServer(options,app);
 

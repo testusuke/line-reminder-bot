@@ -12,8 +12,8 @@ services:
       - MYSQL_USER=admin
       - MYSQL_PASS=password
     volumes:
-      - ~/ssl-cert/server.key:./server.key
-      - ~/ssl-cert/server.crt:./server.crt
+      - ~/ssl-cert/server.key:/app/server.key
+      - ~/ssl-cert/server.crt:/app/server.crt
     ports:
       - '3000:3000'
   db:
