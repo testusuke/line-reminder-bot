@@ -12,7 +12,7 @@ services:
       - MYSQL_USER=admin
       - MYSQL_PASS=password
     ports:
-      - '3000:3000'
+      - '3001:3000'
   mysql:
     image: mysql:5.7
     environment:
@@ -24,7 +24,15 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - ~/docker/line-reminder-bot/db/data:/var/lib/mysql
-      - ~/docker/line-reminder-bot/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ~/docker/line-reminder-bot/db/my.cnf:/etc/mysql/nginx.conf/my.cnf
       - ~/docker/line-reminder-bot/db/sql:/docker-entrypoint-initdb.d
     ports:
       - '3306:3306'
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ~/ssl-cert/nginx.crt:/app/nginx.crt
+      - ~/ssl-cert/nginx.key:/app/nginx.key
+    ports:
+      - '3000:3000'
