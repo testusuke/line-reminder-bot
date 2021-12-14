@@ -17,6 +17,10 @@ const connection = mysql.createConnection({
 //  app
 const expressPort = 3000;
 const app = express();
+app.use(express.json())
+app.use(express.urlencoded({
+    extended: true
+}))
 
 //  listen webhooks
 app.post("/webhook", line.middleware(lineConfig), (req, res) => {
