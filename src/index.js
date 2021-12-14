@@ -19,10 +19,11 @@ const expressPort = 3000;
 const app = express();
 
 //  listen webhooks
-app.post("/", (req, res) => {
+app.get("/", (req, res) => {
     console.log("/ receive");
     console.log(req.body);
 });
+
 app.post("/webhook", line.middleware(lineConfig), (req, res) => {
     console.log("/webhook receive")
     console.log(req.body);
@@ -47,12 +48,6 @@ const handleEvent = (event) => {
         text: event.message.text
     });
 };
-
-const test = () => {
-    console.log("hello");
-};
-
-// setInterval(test, 1000);
 
 //  express start
 app.listen(expressPort);
