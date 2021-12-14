@@ -17,6 +17,11 @@ const connection = mysql.createConnection({
 //  app
 const expressPort = 3000;
 const app = express();
+
+//  route
+app.use("/webhook", line.middleware(lineConfig));
+
+//  middleware
 app.use(express.json())
 app.use(express.urlencoded({
     extended: true
@@ -28,7 +33,7 @@ app.get("/", (req, res) => {
 })
 
 //  listen webhooks
-app.post("/webhook", line.middleware(lineConfig), (req, res) => {
+app.post("/webhook", (req, res) => {
    Promise
        .all(req.body.events.map(handleEvent))
        .then((result) => res.json(result));
