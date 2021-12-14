@@ -22,6 +22,11 @@ app.use(express.urlencoded({
     extended: true
 }))
 
+//  health check
+app.get("/", (req, res) => {
+    res.sendStatus(200)
+})
+
 //  listen webhooks
 app.post("/webhook", line.middleware(lineConfig), (req, res) => {
    Promise
@@ -31,6 +36,7 @@ app.post("/webhook", line.middleware(lineConfig), (req, res) => {
 
 //  line client
 const client = new line.Client(lineConfig);
+
 //  event handler
 const handleEvent = (event) => {
     if (event.type !== 'message' || event.message.type !== 'text') {
