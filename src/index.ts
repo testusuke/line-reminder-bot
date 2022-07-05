@@ -1,3 +1,5 @@
+
+/*
 const express = require("express");
 const line = require("@line/bot-sdk");
 const mysql = require("mysql");
@@ -15,7 +17,8 @@ const connection = mysql.createConnection({
 });
 
 //  app
-const expressPort = 3000;
+// const expressPort = 3000;
+const expressPort = 80;
 const app = express();
 
 //  route
@@ -29,7 +32,7 @@ app.use(express.urlencoded({
 
 //  health check
 app.get("/", (req, res) => {
-    res.sendStatus(200)
+    res.sendStatus(200);
 })
 
 //  listen webhooks
@@ -44,12 +47,10 @@ const client = new line.Client(lineConfig);
 
 //  event handler
 const handleEvent = (event) => {
-    if (event.type !== 'message' || event.message.type !== 'text') {
+    if (event.type !== 'message' || event.message.type !== 'text' || event.source.type !== "group") {
         return Promise.resolve(null);
     }
-
-    console.log(event.message.text);
-
+    
     return client.replyMessage(event.replyToken, {
         type: 'text',
         text: event.message.text
@@ -58,3 +59,5 @@ const handleEvent = (event) => {
 
 //  express start
 app.listen(expressPort);
+
+*/
