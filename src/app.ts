@@ -33,13 +33,9 @@ app.get("/", (req, res) => {
 
 //  listen webhooks
 app.post("/webhook", (req, res) => {
-    debug("came at /webhook")
-    res.status(200).send('')
-    /*
     Promise
         .all(req.body.events.map(onEvent))
-        .then((result) => res.json(result));
-     */
+        .then((result) => res.json(result))
 });
 
 //  line client
@@ -53,6 +49,7 @@ const onEvent = (event: line.WebhookEvent) => {
     }
 
     const args = event.message.text.split(' ')
+    debug(event.message.text)
 
     //  check if message start with mention
     /*
