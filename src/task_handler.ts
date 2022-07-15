@@ -34,6 +34,8 @@ const deadlineHandler = async () => {
 }
 
 const taskUpdateHandler = async () => {
+    _tasks = await getAllTask()
+    /*
     let tasks = await getAllTask()
     tasks = tasks.filter(task => {
         return !_tasks.includes(task)
@@ -42,4 +44,5 @@ const taskUpdateHandler = async () => {
     for (const task of tasks) {
         _tasks.push(task)
     }
+    */
 }
