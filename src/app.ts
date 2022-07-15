@@ -116,6 +116,12 @@ const onEvent = async (event: line.WebhookEvent) => {
 
             default: {
                 const contents = event.message.text.slice(prefix.length)
+                if (contents.length < 2) {
+                    return client.replyMessage(event.replyToken, {
+                        type: 'text',
+                        text: "短すぎます!"
+                    })
+                }
                 //  pre-task
                 let userId = event.source.userId
                 if (!userId) {

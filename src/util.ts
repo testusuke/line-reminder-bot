@@ -4,7 +4,7 @@ import {formatToTimeZone} from 'date-fns-timezone'
 export const prepareTask = async (task: Task): Promise<Task> => {
     const date = getJSTDate()
     const id = await sql.findOne(
-        'INSERT INTO `tasks` (`content`, `group`, `user`, `created_at`) VALUES (?, ?, ?, ?)',
+        'INSERT INTO `tasks` (`contents`, `group`, `user`, `created_at`) VALUES (?, ?, ?, ?)',
         task.contents,
         task.group,
         task.user,
