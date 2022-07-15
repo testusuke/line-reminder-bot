@@ -68,12 +68,14 @@ export const getAllTask = async (groupId?: string, limit: number = 50): Promise<
     return tasks
 }
 
-export const getTask = async (id: number): Promise<Task> => {
+export const getTask = async (id: number): Promise<Task | undefined> => {
 
     const r = await sql.findOne(
         'SELECT * FROM `tasks` WHERE `id`=?',
         id
     )
+
+    if (!r) return undefined
 
     return {
         id: r.id,
