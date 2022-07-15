@@ -49,7 +49,9 @@ const onEvent = (event: line.WebhookEvent) => {
     }
 
     const args = event.message.text.split(' ')
-    debug(event.message.text)
+    debug("MESSAGE")
+    console.log(event.message.text)
+    debug("text: ", event.message.text)
 
     //  check if message start with mention
     /*
