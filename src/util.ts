@@ -1,6 +1,5 @@
 import * as sql from './sql'
 import {formatToTimeZone} from 'date-fns-timezone'
-import * as util from "util";
 
 export const prepareTask = async (task: Task): Promise<Task> => {
     const date = getJSTDate()

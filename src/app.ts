@@ -1,5 +1,5 @@
 require('dotenv').config()
-const debug = require('debug')('line-remainder-bot:app')
+const debug = require('debug')('line-reminder-bot:app')
 import express from 'express'
 import * as line from '@line/bot-sdk'
 import logger from 'morgan'
