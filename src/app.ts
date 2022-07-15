@@ -60,6 +60,20 @@ const onEvent = async (event: line.WebhookEvent) => {
 
         switch (args[1]) {
 
+            case 'help': {
+                const pj = require('./package.json')
+                const msg = "使い方\n" +
+                    prefix + " help -> ヘルプ\n" +
+                    prefix + " list -> タスク一覧\n" +
+                    prefix + " <content> -> タスクを登録\n" +
+                    "追加して欲しい機能があれば気軽に声をかけてください\n" +
+                    "version: " + pj.version + "\n" +
+                    "github: " + pj.repository
+                return client.replyMessage(event.replyToken, {
+                    type: 'text',
+                    text: msg
+                })
+            }
             case 'list': {
                 const groupId = event.source.groupId
                 const tasks = await util.getAllTask(groupId, 10)

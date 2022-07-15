@@ -2,6 +2,7 @@
   "name": "line-reminder-bot",
   "version": "1.0.0",
   "description": "",
+  "repository": "https://github.com/testusuke/line-reminder-bot",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
