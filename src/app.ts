@@ -77,6 +77,14 @@ const onEvent = async (event: line.WebhookEvent) => {
             case 'list': {
                 const groupId = event.source.groupId
                 const tasks = await util.getAllTask(groupId, 10)
+                //  size check
+                if (tasks.length < 1) {
+                    return client.replyMessage(event.replyToken, {
+                        type: 'text',
+                        text: "残っているタスクはありません"
+                    })
+                }
+
                 const columns: line.TemplateColumn[] = []
                 for (const task of tasks) {
                     const col: line.TemplateColumn = {
