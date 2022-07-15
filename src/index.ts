@@ -1,6 +1,6 @@
 require('dotenv').config()
-process.env.DEBUG = 'line-remainder-bot:*'
-const debug = require('debug')('line-remainder-bot:index')
+process.env.DEBUG = 'line-reminder-bot:*'
+const debug = require('debug')('line-reminder-bot:index')
 import {app} from './app'
 import http from "http";
 

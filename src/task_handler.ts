@@ -1,6 +1,6 @@
 import {getAllTask} from "./util";
 
-const debug = require('debug')('line-remainder-bot:task_handler')
+const debug = require('debug')('line-reminder-bot:task_handler')
 import * as line from '@line/bot-sdk'
 import * as util from './util'
 import dayjs from "dayjs";

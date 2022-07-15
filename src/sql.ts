@@ -1,4 +1,4 @@
-const debug = require('debug')('line-remainder-bot:sql')
+const debug = require('debug')('line-reminder-bot:sql')
 import mysql from 'mysql'
 
 const pool = mysql.createPool({
