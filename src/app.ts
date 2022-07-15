@@ -67,8 +67,8 @@ const onEvent = async (event: line.WebhookEvent) => {
                     prefix + " list -> タスク一覧\n" +
                     prefix + " <content> -> タスクを登録\n" +
                     "追加して欲しい機能があれば気軽に声をかけてください\n" +
-                    "version: " + pj.version + "\n" +
-                    "github: " + pj.repository
+                    "version: " + pj.version    // + "\n" +
+                    //"github: " + pj.repository
                 return client.replyMessage(event.replyToken, {
                     type: 'text',
                     text: msg
@@ -124,10 +124,10 @@ const onEvent = async (event: line.WebhookEvent) => {
 
             default: {
                 const contents = event.message.text.slice(prefix.length)
-                if (contents.length < 2) {
+                if (contents.length < 2 || contents.length > 500) {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',
-                        text: "短すぎます!"
+                        text: "1~500文字の範囲で作成してください"
                     })
                 }
                 //  pre-task
