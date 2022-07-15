@@ -1,7 +1,7 @@
 {
   "name": "line-reminder-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Remind me",
   "repository": "https://github.com/testusuke/line-reminder-bot",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "start": "tsc && cross-env NODE_ENV=development node ./dist/"
   },
   "author": "testusuke",
-  "license": "MIT",
+  "license": "APACHE-2.0",
   "dependencies": {
     "@line/bot-sdk": "^7.4.0",
     "cross-env": "^7.0.3",
