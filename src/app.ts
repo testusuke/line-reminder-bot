@@ -37,15 +37,17 @@ app.get("/", (req, res) => {
 //  listen webhooks
 app.post("/webhook", (req, res) => {
     debug("came at /webhook")
-    res.sendStatus(200)
+    res.status(200).send('')
+    /*
     Promise
         .all(req.body.events.map(onEvent))
         .then((result) => res.json(result));
+     */
 });
 
 //  line client
 // @ts-ignore
-// const client = new line.Client(lineConfig);
+const client = new line.Client(lineConfig);
 
 //  event handler
 const onEvent = (event: line.WebhookEvent) => {
