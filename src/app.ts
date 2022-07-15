@@ -20,13 +20,10 @@ const lineConfig: line.Config = {
 export const app = express()
 //  logger
 app.use(logger('dev'))
-//  json, url encoder
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-
-//  line route
 // @ts-ignore
 app.use("/webhook", line.middleware(lineConfig));
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 //  health check
 app.get("/", (req, res) => {
