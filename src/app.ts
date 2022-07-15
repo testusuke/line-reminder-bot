@@ -183,7 +183,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                     return Promise.resolve(null)
                 }
 
-                const task = await util.getTask(+id)
+                const task = await util.getTask(+id, false)
                 if (!task) {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',

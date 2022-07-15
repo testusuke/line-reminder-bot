@@ -69,13 +69,21 @@ export const getAllTask = async (groupId?: string, limit: number = 50): Promise<
     return tasks
 }
 
-export const getTask = async (id: number): Promise<Task | undefined> => {
+export const getTask = async (id: number, due:boolean = true): Promise<Task | undefined> => {
 
-    const r = await sql.findOne(
-        'SELECT * FROM `tasks` WHERE `id`=? AND `due_at`>=?',
-        id,
-        getJSTDate()
-    )
+    let r
+    if (due) {
+        r = await sql.findOne(
+            'SELECT * FROM `tasks` WHERE `id`=? AND `due_at`>=?',
+            id,
+            getJSTDate()
+        )
+    } else {
+        r = await sql.findOne(
+            'SELECT * FROM `tasks` WHERE `id`=?',
+            id
+        )
+    }
 
     if (!r) return undefined
 
