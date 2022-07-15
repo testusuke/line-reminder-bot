@@ -1,8 +1,8 @@
 import * as sql from './sql'
-import exp from "constants";
+import {formatToTimeZone} from 'date-fns-timezone'
 
 export const prepareTask = async (task: Task): Promise<Task> => {
-    const date = new Date().toISOString()
+    const date = getJSTDate()
     const id = await sql.findOne(
         'INSERT INTO `tasks` (`content`, `group`, `user`, `created_at`) VALUES (?, ?, ?, ?)',
         task.contents,
@@ -29,15 +29,75 @@ export const confirmTask = async (id: number, date: string): Promise<boolean> =>
     }
 
     //  update
-    const formattedDate = new Date(date).toISOString()
     await sql.execute(
         'UPDATE `tasks` SET `due_at`=? WHERE `id`=?',
-        formattedDate,
+        formatDateFromLINE(date),
         id
     )
     return true
 }
 
-export const removeTask = async (id: number): Promise<void> => {
+export const getAllTask = async (groupId?: string, limit: number = 50): Promise<Array<Task>> => {
+    let tasks = []
 
+    let result
+    if (!groupId) {
+        result = await sql.query(
+            'SELECT * FROM `tasks` WHERE `due_at`>=?',
+            getJSTDate()
+        )
+    } else {
+        result = await sql.query(
+            'SELECT * FROM `tasks` WHERE `group`=? AND `due_at`>=?',
+            groupId,
+            getJSTDate()
+        )
+    }
+
+    for (const r of result.results) {
+        const task: Task = {
+            id: r.id,
+            contents: r.contents,
+            group: r.group,
+            user: r.user,
+            due_at: r.due_at,
+            created_at: r.created_at
+        }
+        tasks.push(task)
+    }
+    return tasks
+}
+
+export const getTask = async (id: number): Promise<Task> => {
+
+    const r = await sql.findOne(
+        'SELECT * FROM `tasks` WHERE `id`=?',
+        id
+    )
+
+    return {
+        id: r.id,
+        contents: r.contents,
+        group: r.group,
+        user: r.user,
+        due_at: r.due_at,
+        created_at: r.created_at
+    }
+}
+
+export const removeTask = async (id: number): Promise<void> => {
+    await sql.execute(
+        'DELETE FROM `tasks` WHERE `id`=?',
+        id
+    )
+}
+
+export const getJSTDate = (): string => {
+    const FORMAT = 'YYYY-MM-DD HH:mm:ss';
+    const TIME_ZONE_TOKYO = 'Asia/Tokyo';
+    return formatToTimeZone(new Date(), FORMAT, {timeZone: TIME_ZONE_TOKYO})
+}
+
+export const formatDateFromLINE = (date: string): string => {
+    return date.replace('T', ' ') + ":00"
 }

@@ -4,6 +4,9 @@ import express from 'express'
 import * as line from '@line/bot-sdk'
 import logger from 'morgan'
 import * as sql from './sql'
+import * as util from './util'
+import * as taskHandler from './task_handler'
+import * as queryString from 'query-string'
 
 //  sql initialize
 sql.init()
@@ -39,24 +42,150 @@ app.post("/webhook", (req, res) => {
 
 //  line client
 // @ts-ignore
-const client = new line.Client(lineConfig);
+const client = new line.Client(lineConfig)
+const prefix = process.env.PREFIX || "remainder"
+taskHandler.init(client).then(r => debug("handler launched"))
 
 //  event handler
-const onEvent = (event: line.WebhookEvent) => {
+const onEvent = async (event: line.WebhookEvent) => {
     debug(event)
-    if (event.type !== 'message' || event.message.type !== 'text' || event.source.type !== "group") {
-        return Promise.resolve(null);
+
+    //  MessageEvent
+    if (event.type === 'message' && event.message.type === 'text' && event.source.type === "group") {
+        const args = event.message.text.split(' ')
+        //  prefix
+        if (args[0] !== prefix) {
+            return Promise.resolve(null);
+        }
+
+        switch (args[1]) {
+
+            case 'list': {
+                const groupId = event.source.groupId
+                const tasks = await util.getAllTask(groupId, 10)
+                const columns: line.TemplateColumn[] = []
+                for (const task of tasks) {
+                    const col: line.TemplateColumn = {
+                        text: task.contents,
+                        actions: [
+                            //  reset datetime
+                            {
+                                type: "datetimepicker",
+                                label: "日時変更",
+                                data: "action=set-date&taskId="+ task.id,
+                                mode: "datetime",
+                                initial: util.getJSTDate(),
+                                max: "2100-12-31T23:59",
+                                min: util.getJSTDate()
+                            },
+                            //  remove task
+                            {
+                                type: "postback",
+                                label: "タスクの削除",
+                                data: "action=remove-task&taskId="+ task.id
+                            }
+                        ]
+                    }
+                    columns.push(col)
+                }
+
+                //  push
+                return client.replyMessage(event.replyToken, {
+                    type: "template",
+                    altText: "モバイルアプリからのみ閲覧・操作できるアクションです。",
+                    template: {
+                        type: "carousel",
+                        columns: columns
+                    }
+                })
+            }
+
+            default: {
+                const contents = event.message.text.slice(prefix.length)
+                //  pre-task
+                let userId = event.source.userId
+                if (!userId) {
+                    userId = ""
+                }
+                const task = await util.prepareTask({
+                    id: 0,
+                    contents: contents,
+                    group: event.source.groupId,
+                    user: userId,
+                    due_at: "",
+                    created_at: ""
+                })
+
+                //  post datetime action
+                return client.replyMessage(event.replyToken, {
+                    type: "template",
+                    altText: "日時を指定してください。モバイルアプリからのみ操作できるアクションです。",
+                    template: {
+                        type: "confirm",
+                        text: "日時を指定してください",
+                        actions: [
+                            {
+                                type: "datetimepicker",
+                                label: "指定する",
+                                data: "action=set-date&id="+ task.id,
+                                mode: "datetime",
+                                initial: util.getJSTDate(),
+                                max: "2100-12-31T23:59",
+                                min: util.getJSTDate()
+                            }
+                        ]
+                    }
+                })
+            }
+        }
     }
 
-    const args = event.message.text.split(' ')
-    debug("MESSAGE")
-    console.log(event.message.text)
-    debug("text: ", event.message.text)
+    //  onPostBack
+    if (event.type === 'postback') {
 
-    //  check if message start with mention
+        const obj = queryString.parse(event.postback.data)
 
-    return client.replyMessage(event.replyToken, {
-        type: 'text',
-        text: event.message.text
-    })
-};
+        switch (obj.action) {
+            case "set-date": {
+                const id = obj.taskId
+                //  @ts-ignore
+                const date = event.postback.params.datetime
+                if (!id || !date) {
+                    return Promise.resolve(null)
+                }
+
+                const result = await util.confirmTask(+id, date)
+                if (result) {
+                    return client.replyMessage(event.replyToken, {
+                        type: 'text',
+                        text: "日時を設定しました"
+                    })
+                } else {
+                    return client.replyMessage(event.replyToken, {
+                        type: 'text',
+                        text: "すでに終了したタスクもしくは、エラーが発生しました"
+                    })
+                }
+            }
+            case "remove-task": {
+                const id = obj.taskId
+                if (!id) return Promise.resolve(null)
+
+                const task = await util.getTask(+id)
+                if (!task) {
+                    return client.replyMessage(event.replyToken, {
+                        type: 'text',
+                        text: "対象のタスクがありません"
+                    })
+                }
+                await util.removeTask(+id)
+                return client.replyMessage(event.replyToken, {
+                    type: 'text',
+                    text: "削除しました"
+                })
+            }
+            default: return Promise.resolve(null)
+        }
+    }
+
+}
