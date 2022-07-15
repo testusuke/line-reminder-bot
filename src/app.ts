@@ -26,7 +26,7 @@ app.use(logger('dev'))
 // @ts-ignore
 app.use("/webhook", line.middleware(lineConfig));
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({extended: true}))
 
 //  health check
 app.get("/", (req, res) => {
@@ -44,7 +44,7 @@ app.post("/webhook", (req, res) => {
 // @ts-ignore
 const client = new line.Client(lineConfig)
 const prefix = process.env.PREFIX || "remainder"
-taskHandler.init(client).then(r => debug("handler launched"))
+taskHandler.init(client).then(() => debug("handler launched"))
 
 //  event handler
 const onEvent = async (event: line.WebhookEvent) => {
@@ -68,7 +68,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                     prefix + " <content> -> タスクを登録\n" +
                     "追加して欲しい機能があれば気軽に声をかけてください\n" +
                     "version: " + pj.version    // + "\n" +
-                    //"github: " + pj.repository
+                //"github: " + pj.repository
                 return client.replyMessage(event.replyToken, {
                     type: 'text',
                     text: msg
@@ -94,7 +94,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                             {
                                 type: "datetimepicker",
                                 label: "日時変更",
-                                data: "action=set-date&taskId="+ task.id,
+                                data: "action=set-date&taskId=" + task.id,
                                 mode: "datetime",
                                 initial: util.getJSTLineDate(),
                                 max: "2100-12-31T23:59",
@@ -104,7 +104,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                             {
                                 type: "postback",
                                 label: "タスク削除",
-                                data: "action=remove-task&taskId="+ task.id
+                                data: "action=remove-task&taskId=" + task.id
                             }
                         ]
                     }
@@ -155,7 +155,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                             {
                                 type: "datetimepicker",
                                 label: "日時指定",
-                                data: "action=set-date&taskId="+ task.id,
+                                data: "action=set-date&taskId=" + task.id,
                                 mode: "datetime",
                                 initial: util.getJSTLineDate(),
                                 max: "2100-12-31T23:59",
@@ -165,7 +165,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                             {
                                 type: "postback",
                                 label: "キャンセル",
-                                data: "action=remove-task&taskId="+ task.id
+                                data: "action=remove-task&taskId=" + task.id
                             }
                         ]
                     }
@@ -225,7 +225,8 @@ const onEvent = async (event: line.WebhookEvent) => {
                     text: "削除しました"
                 })
             }
-            default: return Promise.resolve(null)
+            default:
+                return Promise.resolve(null)
         }
     }
 
