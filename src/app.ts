@@ -147,7 +147,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                             {
                                 type: "datetimepicker",
                                 label: "日時指定",
-                                data: "action=set-date&id="+ task.id,
+                                data: "action=set-date&taskId="+ task.id,
                                 mode: "datetime",
                                 initial: util.getJSTLineDate(),
                                 max: "2100-12-31T23:59",
