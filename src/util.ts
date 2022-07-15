@@ -21,7 +21,7 @@ export const prepareTask = async (task: Task): Promise<Task> => {
 export const confirmTask = async (id: number, date: string): Promise<boolean> => {
     //  check if task exist
     const task = sql.findOne(
-        'SELECT FROM `tasks` WHERE `id`=?',
+        'SELECT * FROM `tasks` WHERE `id`=?',
         id
     )
     if (!task) {
