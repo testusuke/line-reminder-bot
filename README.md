@@ -1,6 +1,6 @@
-# line-remainder-bot
+# line-reminder-bot
 
-This is Remainder bot
+This is Reminder bot
 
 You can use with docker-compose. A docker-compose.yml is located in [example](example) directory. You need to change
 volume path for saving dictionary data.

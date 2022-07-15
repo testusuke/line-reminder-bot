@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  app:
+    image: node:latest
+    restart: always
+    volumes:
+      - .:/app
+      - ./.env:/app/.env
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    command: bash -c 'yarn && node src/index.js'
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_host
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./data/db/data:/var/lib/mysql
+    ports:
+      - "3306:3306"
