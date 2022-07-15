@@ -36,7 +36,7 @@ app.get("/", (req, res) => {
 
 //  listen webhooks
 app.post("/webhook", (req, res) => {
-    debug("came at /")
+    debug("came at /webhook")
     res.sendStatus(200)
     Promise
         .all(req.body.events.map(onEvent))
