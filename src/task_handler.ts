@@ -20,17 +20,16 @@ export const init = async (client: line.Client, interval: number = 5000) => {
 
 const deadlineHandler = async () => {
     for (const task of _tasks) {
-        if (dayjs(task.due_at).isBefore(util.getJSTDate())) {
-            continue
+        if (dayjs(util.getJSTDate()).isAfter(dayjs(task.due_at))) {
+            //  push message
+            await _client.pushMessage(task.group, {
+                type: 'text',
+                text: task.contents
+            })
+            //  remove
+            const index = _tasks.indexOf(task)
+            _tasks.splice(index, 1)
         }
-        //  push message
-        await _client.pushMessage(task.group, {
-            type: 'text',
-            text: task.contents
-        })
-        //  remove
-        const index = _tasks.indexOf(task)
-        _tasks.splice(index, 1)
     }
 }
 
