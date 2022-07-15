@@ -1,5 +1,6 @@
 import * as sql from './sql'
 import {formatToTimeZone} from 'date-fns-timezone'
+import * as util from "util";
 
 export const prepareTask = async (task: Task): Promise<Task> => {
     const date = getJSTDate()
@@ -71,8 +72,9 @@ export const getAllTask = async (groupId?: string, limit: number = 50): Promise<
 export const getTask = async (id: number): Promise<Task | undefined> => {
 
     const r = await sql.findOne(
-        'SELECT * FROM `tasks` WHERE `id`=?',
-        id
+        'SELECT * FROM `tasks` WHERE `id`=? AND `due_at`>=?',
+        id,
+        getJSTDate()
     )
 
     if (!r) return undefined

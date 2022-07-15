@@ -183,6 +183,14 @@ const onEvent = async (event: line.WebhookEvent) => {
                     return Promise.resolve(null)
                 }
 
+                const task = await util.getTask(+id)
+                if (!task) {
+                    return client.replyMessage(event.replyToken, {
+                        type: 'text',
+                        text: "対象のタスクがありません"
+                    })
+                }
+
                 const result = await util.confirmTask(+id, date)
                 if (result) {
                     return client.replyMessage(event.replyToken, {

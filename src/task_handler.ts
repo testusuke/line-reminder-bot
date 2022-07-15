@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 let _client: line.Client
 let _tasks = new Array<Task>()
 
-export const init = async (client: line.Client, interval: number = 5000) => {
+export const init = async (client: line.Client, interval: number = 1000) => {
     _client = client
 
     //  fetch task
@@ -34,5 +34,12 @@ const deadlineHandler = async () => {
 }
 
 const taskUpdateHandler = async () => {
-    _tasks = await getAllTask()
+    let tasks = await getAllTask()
+    tasks = tasks.filter(task => {
+        return !_tasks.includes(task)
+    })
+
+    for (const task of tasks) {
+        _tasks.push(task)
+    }
 }
