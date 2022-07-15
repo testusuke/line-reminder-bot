@@ -61,7 +61,7 @@ const onEvent = async (event: line.WebhookEvent) => {
         switch (args[1]) {
 
             case 'help': {
-                const pj = require('./package.json')
+                const pj = require('../package.json')
                 const msg = "使い方\n" +
                     prefix + " help -> ヘルプ\n" +
                     prefix + " list -> タスク一覧\n" +
