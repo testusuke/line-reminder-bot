@@ -98,6 +98,12 @@ export const getJSTDate = (): string => {
     return formatToTimeZone(new Date(), FORMAT, {timeZone: TIME_ZONE_TOKYO})
 }
 
+export const getJSTLineDate = (): string => {
+    const FORMAT = 'YYYY-MM-DDtHH:mm';
+    const TIME_ZONE_TOKYO = 'Asia/Tokyo';
+    return formatToTimeZone(new Date(), FORMAT, {timeZone: TIME_ZONE_TOKYO})
+}
+
 export const formatDateFromLINE = (date: string): string => {
     return date.replace('T', ' ') + ":00"
 }

@@ -88,9 +88,9 @@ const onEvent = async (event: line.WebhookEvent) => {
                                 label: "日時変更",
                                 data: "action=set-date&taskId="+ task.id,
                                 mode: "datetime",
-                                initial: util.getJSTDate(),
+                                initial: util.getJSTLineDate(),
                                 max: "2100-12-31T23:59",
-                                min: util.getJSTDate()
+                                min: util.getJSTLineDate()
                             },
                             //  remove task
                             {
@@ -149,9 +149,9 @@ const onEvent = async (event: line.WebhookEvent) => {
                                 label: "指定する",
                                 data: "action=set-date&id="+ task.id,
                                 mode: "datetime",
-                                initial: util.getJSTDate(),
+                                initial: util.getJSTLineDate(),
                                 max: "2100-12-31T23:59",
-                                min: util.getJSTDate()
+                                min: util.getJSTLineDate()
                             }
                         ]
                     }
