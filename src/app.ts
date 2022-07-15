@@ -48,7 +48,7 @@ taskHandler.init(client).then(r => debug("handler launched"))
 
 //  event handler
 const onEvent = async (event: line.WebhookEvent) => {
-    debug(event)
+    // debug(event)
 
     //  MessageEvent
     if (event.type === 'message' && event.message.type === 'text' && event.source.type === "group") {
@@ -176,17 +176,13 @@ const onEvent = async (event: line.WebhookEvent) => {
 
     //  onPostBack
     if (event.type === 'postback') {
-
         const obj = queryString.parse(event.postback.data)
-
-        debug(obj.action)
 
         switch (obj.action) {
             case 'set-date': {
                 const id = obj.taskId
                 //  @ts-ignore
                 const date = event.postback.params.datetime
-                console.log(id, date)
                 if (!id || !date) {
                     return Promise.resolve(null)
                 }
