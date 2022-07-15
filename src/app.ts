@@ -171,7 +171,7 @@ const onEvent = async (event: line.WebhookEvent) => {
 
         const obj = queryString.parse(event.postback.data)
 
-        debug(obj)
+        debug(obj.action)
 
         switch (obj.action) {
             case "set-date": {
