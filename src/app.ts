@@ -31,10 +31,13 @@ app.use("/webhook", line.middleware(lineConfig));
 //  health check
 app.get("/", (req, res) => {
     res.sendStatus(200);
+    debug("came at /")
 })
 
 //  listen webhooks
 app.post("/webhook", (req, res) => {
+    debug("came at /")
+    res.sendStatus(200)
     Promise
         .all(req.body.events.map(onEvent))
         .then((result) => res.json(result));
