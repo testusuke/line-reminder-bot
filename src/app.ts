@@ -28,7 +28,6 @@ app.use(express.urlencoded({ extended: true }))
 //  health check
 app.get("/", (req, res) => {
     res.sendStatus(200);
-    debug("came at /")
 })
 
 //  listen webhooks
@@ -44,6 +43,7 @@ const client = new line.Client(lineConfig);
 
 //  event handler
 const onEvent = (event: line.WebhookEvent) => {
+    debug(event)
     if (event.type !== 'message' || event.message.type !== 'text' || event.source.type !== "group") {
         return Promise.resolve(null);
     }
@@ -54,10 +54,9 @@ const onEvent = (event: line.WebhookEvent) => {
     debug("text: ", event.message.text)
 
     //  check if message start with mention
-    /*
+
     return client.replyMessage(event.replyToken, {
         type: 'text',
         text: event.message.text
-    });
-    */
+    })
 };
