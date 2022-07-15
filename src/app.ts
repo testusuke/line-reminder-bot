@@ -95,7 +95,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                             //  remove task
                             {
                                 type: "postback",
-                                label: "タスクの削除",
+                                label: "タスク削除",
                                 data: "action=remove-task&taskId="+ task.id
                             }
                         ]
@@ -146,12 +146,18 @@ const onEvent = async (event: line.WebhookEvent) => {
                         actions: [
                             {
                                 type: "datetimepicker",
-                                label: "指定する",
+                                label: "日時指定",
                                 data: "action=set-date&id="+ task.id,
                                 mode: "datetime",
                                 initial: util.getJSTLineDate(),
                                 max: "2100-12-31T23:59",
                                 min: util.getJSTLineDate()
+                            },
+                            //  remove task
+                            {
+                                type: "postback",
+                                label: "キャンセル",
+                                data: "action=remove-task&taskId="+ task.id
                             }
                         ]
                     }
