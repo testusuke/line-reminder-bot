@@ -174,7 +174,7 @@ const onEvent = async (event: line.WebhookEvent) => {
         debug(obj.action)
 
         switch (obj.action) {
-            case "set-date": {
+            case 'set-date': {
                 const id = obj.taskId
                 //  @ts-ignore
                 const date = event.postback.params.datetime
@@ -195,7 +195,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                     })
                 }
             }
-            case "remove-task": {
+            case 'remove-task': {
                 const id = obj.taskId
                 if (!id) return Promise.resolve(null)
 
