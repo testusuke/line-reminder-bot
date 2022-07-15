@@ -1,63 +1,16 @@
+require('dotenv').config()
+process.env.DEBUG = 'line-remainder-bot:*'
+const debug = require('debug')('line-remainder-bot:index')
+import {app} from './app'
+import http from "http";
 
-/*
-const express = require("express");
-const line = require("@line/bot-sdk");
-const mysql = require("mysql");
 
-//  line
-const lineConfig = {
-    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
-    channelSecret: process.env.CHANNEL_SECRET
-};
+const port = parseInt(process.env.PORT || '3000', 10);
+app.set('port', port)
+const server = http.createServer(app)
 
-const connection = mysql.createConnection({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASS
-});
-
-//  app
-// const expressPort = 3000;
-const expressPort = 80;
-const app = express();
-
-//  route
-app.use("/webhook", line.middleware(lineConfig));
-
-//  middleware
-app.use(express.json())
-app.use(express.urlencoded({
-    extended: true
-}))
-
-//  health check
-app.get("/", (req, res) => {
-    res.sendStatus(200);
+//  start server
+process.once('ready', () => {
+    server.listen(port)
+    debug('listen at %d', port)
 })
-
-//  listen webhooks
-app.post("/webhook", (req, res) => {
-   Promise
-       .all(req.body.events.map(handleEvent))
-       .then((result) => res.json(result));
-});
-
-//  line client
-const client = new line.Client(lineConfig);
-
-//  event handler
-const handleEvent = (event) => {
-    if (event.type !== 'message' || event.message.type !== 'text' || event.source.type !== "group") {
-        return Promise.resolve(null);
-    }
-    
-    return client.replyMessage(event.replyToken, {
-        type: 'text',
-        text: event.message.text
-    });
-};
-
-//  express start
-app.listen(expressPort);
-
-*/
