@@ -178,6 +178,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                 const id = obj.taskId
                 //  @ts-ignore
                 const date = event.postback.params.datetime
+                console.log(id, date)
                 if (!id || !date) {
                     return Promise.resolve(null)
                 }
