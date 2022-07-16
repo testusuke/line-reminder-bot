@@ -88,7 +88,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                 const columns: line.TemplateColumn[] = []
                 for (const task of tasks) {
                     const col: line.TemplateColumn = {
-                        text: task.contents,
+                        text: task.contents.substring(0, 45) + "\n日時: " + task.due_at,
                         actions: [
                             //  reset datetime
                             {
@@ -199,7 +199,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                 if (result) {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',
-                        text: "日時を設定しました"
+                        text: "日時を" +  date + "に設定しました"
                     })
                 } else {
                     return client.replyMessage(event.replyToken, {
