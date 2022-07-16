@@ -34,6 +34,7 @@ const deadlineHandler = async () => {
 }
 
 const taskUpdateHandler = async () => {
+    await deadlineHandler()
     _tasks = await getAllTask()
     /*
     let tasks = await getAllTask()

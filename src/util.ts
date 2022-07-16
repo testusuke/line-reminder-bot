@@ -68,7 +68,7 @@ export const getAllTask = async (groupId?: string, limit: number = 50): Promise<
     return tasks
 }
 
-export const getTask = async (id: number, due:boolean = true): Promise<Task | undefined> => {
+export const getTask = async (id: number, due: boolean = true): Promise<Task | undefined> => {
 
     let r
     if (due) {

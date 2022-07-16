@@ -81,7 +81,7 @@ export const init = async () => {
                      \`contents\`   text         not null,
                      \`group\`      varchar(255) not null,
                      \`user\`       varchar(64)  not null,
-                     \`due_at\`     DATETIME null,
+                     \`due_at\`     DATETIME     null,
                      \`created_at\` DATETIME     not null,
                      constraint tasks_pk
                          primary key (\`id\`)
