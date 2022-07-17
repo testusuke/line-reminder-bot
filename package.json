@@ -1,6 +1,6 @@
 {
   "name": "line-reminder-bot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Remind me",
   "repository": "https://github.com/testusuke/line-reminder-bot",
   "main": "index.js",

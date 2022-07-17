@@ -72,7 +72,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                 return client.replyMessage(event.replyToken, {
                     type: 'text',
                     text: msg
-                })
+                }, true)
             }
             case 'list': {
                 const groupId = event.source.groupId
@@ -82,7 +82,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',
                         text: "残っているタスクはありません"
-                    })
+                    }, true)
                 }
 
                 const columns: line.TemplateColumn[] = []
@@ -119,7 +119,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                         type: "carousel",
                         columns: columns
                     }
-                })
+                }, true)
             }
 
             default: {
@@ -128,7 +128,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',
                         text: "1~500文字の範囲で作成してください"
-                    })
+                    }, true)
                 }
                 //  pre-task
                 let userId = event.source.userId
@@ -169,7 +169,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                             }
                         ]
                     }
-                })
+                }, true)
             }
         }
     }
@@ -183,7 +183,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                 const id = obj.taskId
                 //  @ts-ignore
                 const date = event.postback.params.datetime
-                if (!id || !date) {
+                if (!id || !date || !event.source.userId) {
                     return Promise.resolve(null)
                 }
 
@@ -192,38 +192,40 @@ const onEvent = async (event: line.WebhookEvent) => {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',
                         text: "対象のタスクがありません"
-                    })
+                    }, true)
                 }
 
                 const result = await util.confirmTask(+id, date)
+                const userProfile = await client.getProfile(event.source.userId)
                 if (result) {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',
-                        text: "日時を" +  date + "に設定しました"
-                    })
+                        text: userProfile.displayName + "さんが、日時を" +  date + "に設定しました"
+                    }, true)
                 } else {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',
                         text: "すでに終了したタスクもしくは、エラーが発生しました"
-                    })
+                    }, true)
                 }
             }
             case 'remove-task': {
                 const id = obj.taskId
-                if (!id) return Promise.resolve(null)
+                if (!id || !event.source.userId) return Promise.resolve(null)
 
-                const task = await util.getTask(+id)
+                const task = await util.getTask(+id, false)
+                const userProfile = await client.getProfile(event.source.userId)
                 if (!task) {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',
                         text: "対象のタスクがありません"
-                    })
+                    }, true)
                 }
                 await util.removeTask(+id)
                 return client.replyMessage(event.replyToken, {
                     type: 'text',
-                    text: "削除しました"
-                })
+                    text: userProfile.displayName + "さんが、タスクを削除しました"
+                }, true)
             }
             default:
                 return Promise.resolve(null)
