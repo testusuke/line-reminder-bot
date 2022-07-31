@@ -187,7 +187,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                     return Promise.resolve(null)
                 }
 
-                const task = await util.getTask(+id, false)
+                const task = await util.getTask(+id)
                 if (!task) {
                     return client.replyMessage(event.replyToken, {
                         type: 'text',
@@ -213,7 +213,7 @@ const onEvent = async (event: line.WebhookEvent) => {
                 const id = obj.taskId
                 if (!id || !event.source.userId) return Promise.resolve(null)
 
-                const task = await util.getTask(+id, false)
+                const task = await util.getTask(+id)
                 const userProfile = await client.getProfile(event.source.userId)
                 if (!task) {
                     return client.replyMessage(event.replyToken, {
