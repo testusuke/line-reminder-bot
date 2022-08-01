@@ -1,4 +1,4 @@
-import {getAllTask} from "./util";
+import {getAllTask, removeTask} from "./util";
 
 const debug = require('debug')('line-reminder-bot:task_handler')
 import * as line from '@line/bot-sdk'
@@ -27,6 +27,7 @@ const deadlineHandler = async () => {
                 text: task.contents
             })
             //  remove
+            await removeTask(task.id)
             const index = _tasks.indexOf(task)
             _tasks.splice(index, 1)
         }

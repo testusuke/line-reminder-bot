@@ -43,14 +43,12 @@ export const getAllTask = async (groupId?: string, limit: number = 50): Promise<
     let result
     if (!groupId) {
         result = await sql.query(
-            'SELECT * FROM `tasks` WHERE `due_at`>=?',
-            getJSTDate()
+            'SELECT * FROM `tasks`'
         )
     } else {
         result = await sql.query(
-            'SELECT * FROM `tasks` WHERE `group`=? AND `due_at`>=?',
-            groupId,
-            getJSTDate()
+            'SELECT * FROM `tasks` WHERE `group`=?',
+            groupId
         )
     }
 
@@ -68,22 +66,12 @@ export const getAllTask = async (groupId?: string, limit: number = 50): Promise<
     return tasks
 }
 
-export const getTask = async (id: number, due: boolean = true): Promise<Task | undefined> => {
+export const getTask = async (id: number): Promise<Task | undefined> => {
 
-    let r
-    if (due) {
-        r = await sql.findOne(
-            'SELECT * FROM `tasks` WHERE `id`=? AND `due_at`>=?',
-            id,
-            getJSTDate()
-        )
-    } else {
-        r = await sql.findOne(
-            'SELECT * FROM `tasks` WHERE `id`=?',
-            id
-        )
-    }
-
+    const r = await sql.findOne(
+        'SELECT * FROM `tasks` WHERE `id`=?',
+        id
+    )
     if (!r) return undefined
 
     return {
